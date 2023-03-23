@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/Cole-DwellStudio/todo-list#readme",
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.3",
     "autoprefixer": "^10.4.14",
     "css-loader": "^6.7.3",
     "html-loader": "^4.2.0",
@@ -28,6 +29,7 @@
     "style-loader": "^3.3.2",
     "tailwindcss": "^3.2.7",
     "webpack": "^5.76.3",
-    "webpack-cli": "^5.0.1"
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.13.1"
   }
 }
