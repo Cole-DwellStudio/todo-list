@@ -5,13 +5,109 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo List</title>
-    <link rel="stylesheet" href="../dist/style.css" />
+    <!-- <link rel="stylesheet" href="./style.css" /> -->
     <script src="./main.js" defer></script>
   </head>
   <body class="h-full">
+    <div
+      id="newproject-overlay"
+      class="h-full w-full z-50 absolute backdrop-blur-sm font-Inter invisible"
+    >
+      <form
+        action=""
+        id="newproject-form"
+        class="absolute left-1/2 p-6 flex flex-col gap-6 justify-between -translate-x-1/2 top-1/2 -translate-y-1/2 bg-white shadow-md rounded-xl border-2 border-black border-opacity-10"
+      >
+        <fieldset class="space-y-2 h-full flex flex-col">
+          <input
+            type="text"
+            name="name"
+            id="newprojectform-name"
+            placeholder="Project Name"
+            required
+            class="rounded-md border-2 border-black border-opacity-10 focus:border-seafoam focus:border-2 focus:ring-seafoam"
+          />
+          <textarea
+            name="description"
+            id="newproject-description"
+            cols="1"
+            rows="1"
+            placeholder="Description"
+            class="rounded-md border-2 border-black border-opacity-10 grow placeholder:align-top h-28 focus:border-seafoam focus:border-2 focus:ring-seafoam"
+          ></textarea>
+          <fieldset class="pt-2 space-x-1">
+            <input
+              type="radio"
+              name="icon"
+              value="crown"
+              id="icon-crown"
+              checked="checked"
+              class="w-8 h-8 border-0 checked:ring-offset-2 checked:ring-2 checked:text-transparent checked:ring-seafoam focus:text-transparent active:ring-0"
+              style="
+                background-image: url('./images/icons/icon-project-crown.svg');
+                background-repeat: no-repeat;
+                background-size: cover;
+              "
+            />
+            <input
+              type="radio"
+              name="icon"
+              value="school"
+              id="icon-school"
+              class="w-8 h-8 border-0 checked:ring-offset-2 checked:ring-2 checked:text-transparent checked:ring-seafoam focus:text-transparent active:ring-0"
+              style="
+                background-image: url('./images/icons/icon-project-school.svg');
+                background-repeat: no-repeat;
+                background-size: cover;
+              "
+            />
+            <input
+              type="radio"
+              name="icon"
+              value="sword"
+              id="icon-sword"
+              class="w-8 h-8 border-0 checked:ring-offset-2 checked:ring-2 checked:text-transparent checked:ring-seafoam focus:text-transparent active:ring-0"
+              style="
+                background-image: url('./images/icons/icon-project-sword.svg');
+                background-repeat: no-repeat;
+                background-size: cover;
+              "
+            />
+            <input
+              type="radio"
+              name="icon"
+              value="dollar"
+              id="icon-dollar"
+              class="w-8 h-8 border-0 checked:ring-offset-2 checked:ring-2 checked:text-transparent checked:ring-seafoam focus:text-transparent active:ring-0"
+              style="
+                background-image: url('./images/icons/icon-project-dollar.svg');
+                background-repeat: no-repeat;
+                background-size: cover;
+              "
+            />
+          </fieldset>
+        </fieldset>
+        <div class="w-full flex justify-between gap-3">
+          <button
+            class="border-2 border-black border-opacity-10 rounded-md px-7 py-1 shadow-sm font-medium text-white bg-seafoam"
+            type="submit"
+          >
+            Create Project
+          </button>
+          <button
+            class="border-2 border-black border-opacity-10 rounded-md px-7 py-1 shadow-sm font-medium text-white bg-soft-red"
+            type="reset"
+            id="newproject-cancelbutton"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
     <div id="container" class="font-Inter font-medium flex flex-row h-full">
       <nav
-        class="p-8 pt-10 bg-[#F4F6F6] h-full overflow-clip border-r-2 border-[#DCDCDC] text-[#303030]"
+        class="overflow-y-auto p-8 pt-10 bg-[#F4F6F6] h-full min-w-min overflow-clip border-r-2 border-[#DCDCDC] text-[#303030]"
+        id="style-8"
       >
         <div>
           <div id="user" class="flex gap-2">
@@ -37,38 +133,47 @@
               Mark F
             </h2>
           </div>
-          <ul id="default_categories" class="mt-8 space-y-4 font-medium ml-4">
-            <li class="flex gap-2">
-              <img src="./Icon01.svg" alt="" srcset="" />
-              <a href="">Today</a>
+          <ul id="default_categories" class="mt-8 space-y-4 font-medium">
+            <li
+              class="flex gap-2 bg-black bg-opacity-[0] rounded-full pl-4 py-1"
+            >
+              <img
+                src="./images/icons/icon-category-today.svg"
+                alt=""
+                srcset=""
+              />
+              <button>Today</button>
             </li>
-            <li class="flex gap-2">
-              <img src="./Icon02.svg" alt="" srcset="" />
-              <a>Overdue</a>
+            <li
+              class="flex gap-2 bg-black bg-opacity-[.035] rounded-full pl-4 py-1"
+            >
+              <img
+                src="./images/icons/icon-category-overdue.svg"
+                alt=""
+                srcset=""
+              />
+              <button>Overdue</button>
             </li>
-            <li class="flex gap-2">
-              <img src="./Icon03.svg" alt="" srcset="" />
-              <a>Completed</a>
+            <li
+              class="flex gap-2 bg-black bg-opacity-[0] rounded-full pl-4 py-1"
+            >
+              <img
+                src="./images/icons/icon-category-completed.svg"
+                alt=""
+                srcset=""
+              />
+              <button>Completed</button>
             </li>
           </ul>
         </div>
         <div class="pt-16">
           <h2 class="text-2xl font-semibold pb-4 text-[#303030]">Projects</h2>
           <div class="relative h-8 overflow-visible">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="2"
-              stroke="#9B9B9B"
-              class="w-[1.125rem] h-[1.125rem] absolute left-3.5 bottom-1.5"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-              />
-            </svg>
+            <img
+              src="images/icons/icon-search.svg"
+              class="w-[1.14rem] h-[1.14rem] absolute left-3.5 bottom-[0.45rem]"
+              alt=""
+            />
             <input
               type="text"
               name=""
@@ -78,27 +183,10 @@
             />
           </div>
           <ul
-            id="projects"
-            class="space-y-4 overflow-y-auto mt-7 max-h-80 ml-4 font-medium"
-          >
-            <li class="flex gap-2">
-              <img src="./Icon04.svg" alt="" srcset="" />
-              <a>Fundraiser</a>
-            </li>
-            <li class="flex gap-2">
-              <img src="./Icon05.svg" alt="" srcset="" />
-              <a>School</a>
-            </li>
-            <li class="flex gap-2">
-              <img src="./Icon06.svg" alt="" srcset="" />
-              <a>Odin Project</a>
-            </li>
-            <li class="flex gap-2">
-              <img src="./Icon07.svg" alt="" srcset="" />
-              <a>D&D Campaign</a>
-            </li>
-          </ul>
-          <button class="mt-6 ml-4">
+            id="projects-list"
+            class="space-y-4 overflow-y-auto mt-7 max-h-80 font-medium"
+          ></ul>
+          <button class="mt-6 ml-4" id="new-project">
             <div class="underline flex space-x-1 text-[#9B9B9B]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -120,7 +208,70 @@
           </button>
         </div>
       </nav>
-      <div class="flex-grow-1"></div>
+      <div class="w-full p-16 pt-14" id="project-panel">
+        <h2 class="text-2xl font-semibold" id="projectname-header">
+          Project Name
+        </h2>
+        <div class="relative h-8 overflow-visible mt-6 mb-12">
+          <img
+            src="images/icons/icon-search.svg"
+            class="w-[1.14rem] h-[1.14rem] absolute left-3.5 bottom-[0.45rem]"
+            alt=""
+          />
+          <input
+            type="text"
+            name=""
+            id=""
+            placeholder="Search"
+            class="rounded-full border-black border-opacity-20 bg-opacity-0 focus:ring-seafoam focus:ring-2 pb-2 w-full max-w-md h-full px-10 placeholder:text-[#9B9B9B] placeholder:font-normal border-2"
+          />
+        </div>
+        <div id="todo-container" class="max-w-sm min-w-max flex flex-col gap-4">
+          <div
+            class="flex items-center rounded-full pl-1.5 pr-4 bg-white shadow-md w-full h-10 border-black border border-opacity-10 font-medium"
+          >
+            <button id="note-status">
+              <img
+                src="./images/icons/icon-complete.svg"
+                alt=""
+                class="h-7 w-7 mr-3"
+                id="note-status-icon"
+              />
+            </button>
+            <div class="whitespace-nowrap mr-5">John's Birthday Party</div>
+            <div id="note-duedate" class="ml-auto">4/12/23</div>
+            <button id="note-delete" class="ml-4">
+              <img src="./images/icons/icon-delete.svg" alt="" class="h-5" />
+            </button>
+          </div>
+        </div>
+        <button class="mt-7 ml-2" id="new-todo">
+          <div class="underline flex space-x-1 text-[#303030]">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 6v12m6-6H6"
+              />
+            </svg>
+
+            <span class="">New Item</span>
+          </div>
+        </button>
+      </div>
     </div>
+    <script id="project-template" type="text/template">
+      <li class="flex gap-2 bg-black bg-opacity-[0] rounded-full pl-4 py-1">
+        <img src="./images/icons/icon-project-dollar.svg" alt="" srcset="" id="project-icon"/>
+        <button id="project-title">Fundraiser</button>
+      </li>
+    </script>
   </body>
 </html>
