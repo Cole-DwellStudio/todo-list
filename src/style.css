@@ -4,28 +4,28 @@
 
 @font-face {
   font-family: "Inter";
-  src: url("./Inter-Medium.ttf");
+  src: url("./assets/Inter-Medium.ttf");
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Inter";
-  src: url("./Inter-Regular.ttf");
+  src: url("./assets/Inter-Regular.ttf");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Inter";
-  src: url("./Inter-Light.ttf");
+  src: url("./assets/Inter-Light.ttf");
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Inter";
-  src: url("./Inter-SemiBold.ttf");
+  src: url("./assets/Inter-SemiBold.ttf");
   font-weight: 600;
   font-style: normal;
 }
