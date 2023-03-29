@@ -31,6 +31,9 @@ const displayManager = (() => {
   const newProjectOverlay = document.getElementById("newproject-overlay");
   const projectPanel = document.getElementById("project-panel");
   const todoContainer = document.getElementById("todo-container");
+  const categoryToday = document.getElementById("category-today");
+  const categoryOverdue = document.getElementById("category-today");
+  const categoryCompleted = document.getElementById("category-today");
 
   let activeProject = null;
 
@@ -66,7 +69,10 @@ const displayManager = (() => {
   todoContainer.addEventListener("click", (e) => {
     e.stopPropagation();
     if (e.target.nodeName == "BUTTON") {
-      activeProject.removeTodo(e.target.dataset.title);
+      projectManager.removeTodoFromProject(
+        activeProject,
+        e.target.dataset.title
+      );
     }
   });
 
@@ -104,7 +110,8 @@ const displayManager = (() => {
         : "",
     });
 
-    activeProject.addTodo(newTodo);
+    projectManager.addTodoToProject(activeProject, newTodo);
+    // activeProject.addTodo(newTodo);
 
     newTodoForm.reset();
     newTodoOverlay.classList.toggle("invisible");
@@ -126,10 +133,10 @@ const displayManager = (() => {
   const renderProjectsList = (projects) => {
     projectsList.innerHTML = "";
     projects.forEach((project) => {
-      projectsList.innerHTML += project.getTemplate();
+      projectsList.innerHTML += project.template;
     });
     projectsList.querySelectorAll("#projectlist-item").forEach((li) => {
-      if (li.dataset.project == activeProject.getTitle()) {
+      if (li.dataset.project == activeProject.title) {
         li.classList.toggle("bg-opacity-[0.04]");
         li.classList.toggle("bg-black");
       }
@@ -138,14 +145,14 @@ const displayManager = (() => {
 
   const renderTodos = () => {
     todoContainer.innerHTML = "";
-    activeProject.getTodos().forEach((todo) => {
-      todoContainer.innerHTML += todo.getTemplate();
+    activeProject.todos.forEach((todo) => {
+      todoContainer.innerHTML += todo.template;
     });
   };
 
   const renderProjectPage = () => {
     projectPanel.querySelector("#projectname-header").innerHTML =
-      activeProject.getTitle();
+      activeProject.title;
     // todoContainer.innerHTML = "";
 
     renderTodos();

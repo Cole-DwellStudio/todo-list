@@ -9,6 +9,7 @@ import todo from "./todo.js";
 import project from "./project.js";
 import projectManager from "./projectManager";
 import displayManager from "./displayManager";
+import localStorageManager from "./localStorageManager";
 
 //import assets
 import crownIcon from "./assets/icon-project-crown.svg";
@@ -16,4 +17,6 @@ import schoolIcon from "./assets/icon-project-school.svg";
 import swordIcon from "./assets/icon-project-sword.svg";
 import dollarIcon from "./assets/icon-project-dollar.svg";
 
-projectManager.createProject({ title: "Default Project", icon: crownIcon });
+// projectManager.createProject({ title: "Default Project", icon: crownIcon });
+
+projectManager.initialize();
