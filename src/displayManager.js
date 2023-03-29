@@ -30,6 +30,7 @@ const displayManager = (() => {
   const newTodoOverlay = document.getElementById("newtodo-overlay");
   const newProjectOverlay = document.getElementById("newproject-overlay");
   const projectPanel = document.getElementById("project-panel");
+  const todoContainer = document.getElementById("todo-container");
 
   let activeProject = null;
 
@@ -39,8 +40,8 @@ const displayManager = (() => {
     renderProjectPage();
   };
 
-  const onTodosChanged = () => {
-    renderProjectPage();
+  const onTodosChanged = (newTodo) => {
+    renderTodos();
   };
 
   pubSub.subscribe("projectsChanged", onProjectsChanged);
@@ -50,7 +51,6 @@ const displayManager = (() => {
     e.preventDefault();
 
     newProjectOverlay.classList.toggle("invisible");
-    // projectManager.createProject({ title: "Personal", icon: crownIcon });
   });
 
   newTodoButton.addEventListener("click", (e) => {
@@ -61,6 +61,13 @@ const displayManager = (() => {
 
   newTodoCancelButton.addEventListener("click", (e) => {
     newTodoOverlay.classList.toggle("invisible");
+  });
+
+  todoContainer.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (e.target.nodeName == "BUTTON") {
+      activeProject.removeTodo(e.target.dataset.title);
+    }
   });
 
   projectsList.addEventListener("click", (e) => {
@@ -86,21 +93,15 @@ const displayManager = (() => {
       alert("No active project to add todos to");
     }
 
-    // console.log(
-    //   format(parseISO(formData.get("dueDate")), "yyyy-MM-dd'T'HH:mm", {
-    //     awareOfUnicodeTokens: true,
-    //   })
-    // );
-
-    // "yyyy-MM-dd'T'HH:mm"
-
     let newTodo = todo({
       title: formData.get("name"),
       description: formData.get("description"),
-      dueDate: format(
-        parseISO(formData.get("dueDate"), { additionalDigits: 1 }),
-        "M/dd/yy h:m a"
-      ),
+      dueDate: formData.get("dueDate")
+        ? format(
+            parseISO(formData.get("dueDate"), { additionalDigits: 1 }),
+            "M/dd/yy h:m a"
+          )
+        : "",
     });
 
     activeProject.addTodo(newTodo);
@@ -135,39 +136,18 @@ const displayManager = (() => {
     });
   };
 
-  const setActiveProject = (newActiveProjectName) => {
-    activeProject = projectManager.setActiveProject(newActiveProjectName);
-
-    if (activeProject == null) {
-      alert("No project by that name in the project list");
-      return;
-    }
-
-    renderProjectPage();
-    // activeProject = null;
-    // projectManager.getProjects().forEach((project) => {
-    //   if (project.getTitle() == newActiveProjectName) {
-    //     activeProject = project;
-    //   }
-    // });
-    // if (activeProject == null) {
-    //   alert("project not found");
-    // }
-    // renderProjectPage();
-  };
-
-  const renderProjectPage = () => {
-    projectPanel.querySelector("#projectname-header").innerHTML =
-      activeProject.getTitle();
-    let todoContainer = projectPanel.querySelector("#todo-container");
+  const renderTodos = () => {
     todoContainer.innerHTML = "";
-
     activeProject.getTodos().forEach((todo) => {
       todoContainer.innerHTML += todo.getTemplate();
     });
   };
 
-  return {
-    renderProjectPage,
+  const renderProjectPage = () => {
+    projectPanel.querySelector("#projectname-header").innerHTML =
+      activeProject.getTitle();
+    // todoContainer.innerHTML = "";
+
+    renderTodos();
   };
 })();

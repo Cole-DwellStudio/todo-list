@@ -1,5 +1,6 @@
 export { project as default };
 
+import pubsub from "./pubSub.js";
 import pubSub from "./pubSub.js";
 
 const project = (title, newIcon) => {
@@ -20,13 +21,23 @@ const project = (title, newIcon) => {
       return;
     }
     todos.push(newTodo);
-    pubSub.publish("todosChanged", todos);
+    pubSub.publish("todosChanged", newTodo);
+  };
+
+  const removeTodo = (todoName) => {
+    todos.forEach((todo) => {
+      if (todo.getTitle() == todoName) {
+        todos.splice(todos.indexOf(todo), 1);
+        pubsub.publish("todosChanged");
+      }
+    });
   };
 
   return {
     getTitle,
     getTodos,
     addTodo,
+    removeTodo,
     getTemplate,
   };
 };

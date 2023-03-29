@@ -15,6 +15,8 @@ const todo = ({
   let priority = newPriority;
   let notes = newNotes;
 
+  let deleteButton = null;
+
   const template = `<div
             class="flex items-center rounded-full pl-1.5 pr-4 bg-white shadow-md w-full h-10 border-black border border-opacity-10 font-medium"
           >
@@ -28,8 +30,7 @@ const todo = ({
             </button>
             <div class="whitespace-nowrap mr-5">${title}</div>
             <div id="note-duedate" class="ml-auto">${dueDate}</div>
-            <button id="note-delete" class="ml-4">
-              <img src="./images/icons/icon-delete.svg" alt="" class="h-5" />
+            <button id="deletebutton" data-title="${title}" class="ml-4 h-6 w-5" style="background: url(/images/icons/icon-delete.svg) no-repeat; background-size: cover">
             </button>
           </div>`;
 
@@ -37,8 +38,15 @@ const todo = ({
     title = newTitle;
   };
 
+  const setDeleteButton = (buttonElement) => {
+    deleteButton = buttonElement;
+  };
+
+  // <img src="./images/icons/icon-delete.svg" alt="" class="h-5" />;
+
+  const getDeleteButton = () => deleteButton;
   const getTitle = () => title;
   const getTemplate = () => template;
 
-  return { setTitle, getTitle, getTemplate };
+  return { setTitle, getTitle, getTemplate, setDeleteButton, getDeleteButton };
 };
