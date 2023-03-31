@@ -60,31 +60,58 @@ const displayManager = (() => {
   pubSub.subscribe("todosChanged", onTodosChanged);
 
   categoryToday.addEventListener("click", (e) => {
-    if (activeProject?.todos) {
-      let filteredTodos = activeProject.todos.filter((todo) =>
-        isToday(parse(todo.dueDate, "M/dd/yy h:m a", new Date()))
-      );
-      renderTodos(filteredTodos);
-    }
+    projectManager.setActiveProject("today");
+    setCategoryActive(categoryToday);
+    // if (activeProject?.todos) {
+    //   let filteredTodos = activeProject.todos.filter((todo) =>
+    //     isToday(parse(todo.dueDate, "M/dd/yy h:m a", new Date()))
+    //   );
+    //   renderTodos(filteredTodos);
+    // }
   });
 
   categoryOverdue.addEventListener("click", (e) => {
-    if (activeProject?.todos) {
-      let filteredTodos = activeProject.todos.filter((todo) =>
-        isPast(parse(todo.dueDate, "M/dd/yy h:m a", new Date()))
-      );
-      renderTodos(filteredTodos);
-    }
+    projectManager.setActiveProject("overdue");
+    setCategoryActive(categoryOverdue);
+    // if (activeProject?.todos) {
+    //   let filteredTodos = activeProject.todos.filter((todo) =>
+    //     isPast(parse(todo.dueDate, "M/dd/yy h:m a", new Date()))
+    //   );
+    //   renderTodos(filteredTodos);
+    // }
   });
 
   categoryCompleted.addEventListener("click", (e) => {
-    if (activeProject.todos) {
-      let filteredTodos = activeProject.todos.filter(
-        (todo) => todo.status == "complete"
-      );
-      renderTodos(filteredTodos);
-    }
+    projectManager.setActiveProject("completed");
+    setCategoryActive(categoryCompleted);
+    // if (activeProject.todos) {
+    //   let filteredTodos = activeProject.todos.filter(
+    //     (todo) => todo.status == "complete"
+    //   );
+    //   renderTodos(filteredTodos);
+    // }
   });
+
+  const setCategoryActive = (category) => {
+    categoryToday.parentElement.classList.remove("bg-opacity-[0.04]");
+    categoryToday.parentElement.classList.remove("bg-black");
+    categoryCompleted.parentElement.classList.remove("bg-opacity-[0.04]");
+    categoryCompleted.parentElement.classList.remove("bg-black");
+    categoryOverdue.parentElement.classList.remove("bg-opacity-[0.04]");
+    categoryOverdue.parentElement.classList.remove("bg-black");
+    if (category == categoryToday) {
+      categoryToday.parentElement.classList.add("bg-opacity-[0.04]");
+      categoryToday.parentElement.classList.add("bg-black");
+    }
+    if (category == categoryCompleted) {
+      categoryCompleted.parentElement.classList.add("bg-opacity-[0.04]");
+      categoryCompleted.parentElement.classList.add("bg-black");
+    }
+    if (category == categoryOverdue) {
+      categoryOverdue.parentElement.classList.add("bg-opacity-[0.04]");
+      categoryOverdue.parentElement.classList.add("bg-black");
+    }
+  };
 
   newProjectButton.addEventListener("click", (e) => {
     e.preventDefault();
@@ -157,6 +184,15 @@ const displayManager = (() => {
       alert("No active project to add todos to");
     }
 
+    if (
+      projectManager.findTodo(formData.get("name")) &&
+      projectManager.findTodo(formData.get("name")).title ==
+        formData.get("name")
+    ) {
+      alert("todo already exists with that name.");
+      return;
+    }
+
     let newTodo = todo({
       title: formData.get("name"),
       description: formData.get("description"),
@@ -189,6 +225,7 @@ const displayManager = (() => {
   });
 
   const renderProjectsList = (projects) => {
+    setCategoryActive();
     projectsList.innerHTML = "";
     projects.forEach((project) => {
       projectsList.innerHTML += project.template;

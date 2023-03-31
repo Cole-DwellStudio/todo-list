@@ -3,11 +3,64 @@ export { projectManager as default };
 import pubSub from "./pubSub";
 import project from "./project";
 import crownIcon from "./assets/icon-project-crown.svg";
+import {
+  format,
+  parseISO,
+  formatISO,
+  isSameDay,
+  isToday,
+  isPast,
+  isDate,
+  parse,
+} from "date-fns";
 
 const projectManager = (() => {
   let projects = [];
 
   let activeProject = null;
+
+  let todayProject = project("Today", "crown");
+  let overdueProject = project("Overdue", "crown");
+  let completedProject = project("Completed", "crown");
+
+  const filterToday = () => {
+    todayProject.todos = [];
+    projects.forEach((project) => {
+      project.todos.forEach((todo) => {
+        if (isToday(parse(todo.dueDate, "M/dd/yy h:m a", new Date()))) {
+          if (!todayProject.todos.includes(todo)) {
+            todayProject.todos.push(todo);
+          }
+        }
+      });
+    });
+  };
+
+  const filterOverdue = () => {
+    overdueProject.todos = [];
+    projects.forEach((project) => {
+      project.todos.forEach((todo) => {
+        if (isPast(parse(todo.dueDate, "M/dd/yy h:m a", new Date()))) {
+          if (!overdueProject.todos.includes(todo)) {
+            overdueProject.todos.push(todo);
+          }
+        }
+      });
+    });
+  };
+
+  const filterCompleted = () => {
+    completedProject.todos = [];
+    projects.forEach((project) => {
+      project.todos.forEach((todo) => {
+        if (todo.status == "complete") {
+          if (!completedProject.todos.includes(todo)) {
+            completedProject.todos.push(todo);
+          }
+        }
+      });
+    });
+  };
 
   const initialize = () => {
     if (localStorage.getItem("projects")) {
@@ -20,6 +73,24 @@ const projectManager = (() => {
   };
 
   const setActiveProject = (newActiveProjectName) => {
+    if (newActiveProjectName == "today") {
+      filterToday();
+      activeProject = todayProject;
+      pubSub.publish("projectsChanged", projects);
+      return todayProject;
+    }
+    if (newActiveProjectName == "overdue") {
+      filterOverdue();
+      activeProject = overdueProject;
+      pubSub.publish("projectsChanged", projects);
+      return overdueProject;
+    }
+    if (newActiveProjectName == "completed") {
+      filterCompleted();
+      activeProject = completedProject;
+      pubSub.publish("projectsChanged", projects);
+      return completedProject;
+    }
     projects.forEach((project) => {
       if (project.title == newActiveProjectName) {
         activeProject = project;
