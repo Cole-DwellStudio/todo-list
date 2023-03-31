@@ -217,7 +217,7 @@
                 alt=""
                 srcset=""
               />
-              <button class="category-overdue">Overdue</button>
+              <button id="category-overdue">Overdue</button>
             </li>
             <li
               class="flex gap-2 rounded-full bg-black bg-opacity-[0] py-1 pl-4"
@@ -227,7 +227,7 @@
                 alt=""
                 srcset=""
               />
-              <button class="category-completed">Completed</button>
+              <button id="category-completed">Completed</button>
             </li>
           </ul>
         </div>
@@ -273,10 +273,23 @@
           </button>
         </div>
       </nav>
-      <div class="w-full p-16 pt-14" id="project-panel">
-        <h2 class="text-2xl font-semibold" id="projectname-header">
-          Project Name
-        </h2>
+      <div class="overflow-hidden p-16 pt-14" id="project-panel">
+        <div class="flex flex-row">
+          <h2
+            class="mt-auto align-bottom text-2xl font-semibold"
+            id="projectname-header"
+          >
+            Project Name
+          </h2>
+          <button
+            id="project-editbutton"
+            class="my-auto ml-5 h-5 w-5"
+            style="
+              background: url(./images/icons/icon-edit.svg) no-repeat;
+              background-size: cover;
+            "
+          ></button>
+        </div>
         <div class="relative mt-6 h-8 overflow-visible">
           <img
             src="images/icons/icon-search.svg"
