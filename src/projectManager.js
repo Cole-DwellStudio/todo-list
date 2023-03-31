@@ -72,6 +72,25 @@ const projectManager = (() => {
     // //   });
   };
 
+  const changeTodoStatus = (todoName) => {
+    let todoToChange = activeProject.todos.find(
+      (todo) => todo.title == todoName
+    );
+    if (todoToChange) {
+      todoToChange.status =
+        todoToChange.status == "complete" ? "incomplete" : "complete";
+      pubSub.publish("todosChanged", activeProject.todos);
+    }
+    return todoToChange.status;
+  };
+
+  const findTodo = (nameOfTodoToFind) => {
+    let foundTodo = activeProject.todos.find(
+      (todo) => todo.title == nameOfTodoToFind
+    );
+    return foundTodo;
+  };
+
   const getProjects = () => projects;
   const getActiveProject = () => activeProject;
 
@@ -94,6 +113,8 @@ const projectManager = (() => {
     addTodoToProject,
     removeTodoFromProject,
     initialize,
+    changeTodoStatus,
+    findTodo,
   };
   // store an array of all the {projects}
   // the displayManager will ask us to make a new project

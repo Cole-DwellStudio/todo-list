@@ -3,7 +3,16 @@ export { displayManager as default };
 import pubSub from "./pubSub";
 import projectManager from "./projectManager";
 import todo from "./todo.js";
-import { format, parseISO, formatISO } from "date-fns";
+import {
+  format,
+  parseISO,
+  formatISO,
+  isSameDay,
+  isToday,
+  isPast,
+  isDate,
+  parse,
+} from "date-fns";
 
 //import images
 import crownIcon from "./assets/icon-project-crown.svg";
@@ -32,8 +41,8 @@ const displayManager = (() => {
   const projectPanel = document.getElementById("project-panel");
   const todoContainer = document.getElementById("todo-container");
   const categoryToday = document.getElementById("category-today");
-  const categoryOverdue = document.getElementById("category-today");
-  const categoryCompleted = document.getElementById("category-today");
+  const categoryOverdue = document.getElementById("category-overdue");
+  const categoryCompleted = document.getElementById("category-completed");
 
   let activeProject = null;
 
@@ -49,6 +58,33 @@ const displayManager = (() => {
 
   pubSub.subscribe("projectsChanged", onProjectsChanged);
   pubSub.subscribe("todosChanged", onTodosChanged);
+
+  categoryToday.addEventListener("click", (e) => {
+    if (activeProject?.todos) {
+      let filteredTodos = activeProject.todos.filter((todo) =>
+        isToday(parse(todo.dueDate, "M/dd/yy h:m a", new Date()))
+      );
+      renderTodos(filteredTodos);
+    }
+  });
+
+  categoryOverdue.addEventListener("click", (e) => {
+    if (activeProject?.todos) {
+      let filteredTodos = activeProject.todos.filter((todo) =>
+        isPast(parse(todo.dueDate, "M/dd/yy h:m a", new Date()))
+      );
+      renderTodos(filteredTodos);
+    }
+  });
+
+  categoryCompleted.addEventListener("click", (e) => {
+    if (activeProject.todos) {
+      let filteredTodos = activeProject.todos.filter(
+        (todo) => todo.status == "complete"
+      );
+      renderTodos(filteredTodos);
+    }
+  });
 
   newProjectButton.addEventListener("click", (e) => {
     e.preventDefault();
@@ -69,12 +105,34 @@ const displayManager = (() => {
   todoContainer.addEventListener("click", (e) => {
     e.stopPropagation();
     if (e.target.nodeName == "BUTTON") {
-      projectManager.removeTodoFromProject(
-        activeProject,
-        e.target.dataset.title
-      );
+      if (e.target.id == "deletebutton") {
+        projectManager.removeTodoFromProject(
+          activeProject,
+          e.target.dataset.title
+        );
+      }
+      if (e.target.id == "statusbutton") {
+        let status = projectManager.changeTodoStatus(e.target.dataset.title);
+        // e.target.style.background = `url(${getStatusIcon(status)}) no-repeat`;
+        // e.target.style.backgroundSize = "cover";
+      }
     }
   });
+
+  const getStatusIcon = (status) => {
+    let iconSource = "";
+    switch (status) {
+      case "complete":
+        iconSource = "/images/icons/icon-complete.svg";
+        break;
+      case "incomplete":
+        iconSource = "/images/icons/icon-incomplete.svg";
+        break;
+      default:
+        iconSource = "/images/icons/icon-incomplete.svg";
+    }
+    return iconSource;
+  };
 
   projectsList.addEventListener("click", (e) => {
     if (e.target.nodeName == "BUTTON") {
@@ -143,10 +201,21 @@ const displayManager = (() => {
     });
   };
 
-  const renderTodos = () => {
+  const renderTodos = (todos) => {
+    let todosToRender = todos ? todos : activeProject.todos;
+
     todoContainer.innerHTML = "";
-    activeProject.todos.forEach((todo) => {
+    todosToRender.forEach((todo) => {
       todoContainer.innerHTML += todo.template;
+    });
+    todoContainer.querySelectorAll("#statusbutton").forEach((statusButton) => {
+      let todo = projectManager.findTodo(statusButton.dataset.title);
+      if (todo) {
+        statusButton.style.background = `url(${getStatusIcon(
+          todo.status
+        )}) no-repeat`;
+        statusButton.style.backgroundSize = "cover";
+      }
     });
   };
 
