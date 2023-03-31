@@ -20,6 +20,10 @@ import schoolIcon from "./assets/icon-project-school.svg";
 import swordIcon from "./assets/icon-project-sword.svg";
 import dollarIcon from "./assets/icon-project-dollar.svg";
 
+import iconIncomplete from "./assets/icon-incomplete.svg";
+import iconComplete from "./assets/icon-complete.svg";
+import iconDelete from "./assets/icon-delete.svg";
+
 const displayManager = (() => {
   const icons = {
     crown: crownIcon,
@@ -150,13 +154,13 @@ const displayManager = (() => {
     let iconSource = "";
     switch (status) {
       case "complete":
-        iconSource = "/images/icons/icon-complete.svg";
+        iconSource = iconComplete;
         break;
       case "incomplete":
-        iconSource = "/images/icons/icon-incomplete.svg";
+        iconSource = iconIncomplete;
         break;
       default:
-        iconSource = "/images/icons/icon-incomplete.svg";
+        iconSource = iconIncomplete;
     }
     return iconSource;
   };
